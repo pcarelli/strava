@@ -44,6 +44,11 @@ export default function App(){
         activityCount={stravaData.length}
       />
       <div className='app-container'>
+        <div className='filterBar'>
+          <button className='chiclet chiclet-swim'>Swim</button>
+          <button className='chiclet chiclet-bike'>Bike</button>
+          <button className='chiclet chiclet-run'>Run</button>
+        </div>
         <div className='cards-container'>
           {stravaData.map(activity => {
             return (
