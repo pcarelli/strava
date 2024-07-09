@@ -87,8 +87,7 @@ p {
 }
 
 .chiclet {
-  border: solid rgb(238, 138, 102) 1px;
-  border-radius: 12px;
+  border-radius: 16px;
   background-color: white;
   font-family: 'Karla', sans-serif;
   font-weight: 500;
@@ -96,8 +95,32 @@ p {
   margin: 1em;
 }
 
-.chiclet:hover {
-  background-color: rgb(238, 138, 102);
+.chiclet-swim {
+  border: solid rgb(102, 172, 238) 1px;
+}
+
+.chiclet-bike {
+  border: solid rgb(53, 145, 80) 1px;
+}
+
+.chiclet-run {
+  border: solid rgb(204, 45, 45) 1px;
+}
+
+.chiclet-swim:hover {
+  background-color: rgb(102, 172, 238);
+  color: white;
+  cursor: pointer;
+}
+
+.chiclet-bike:hover {
+  background-color: rgb(53, 145, 80);
+  color: white;
+  cursor: pointer;
+}
+
+.chiclet-run:hover {
+  background-color: rgb(204, 45, 45);
   color: white;
   cursor: pointer;
 }

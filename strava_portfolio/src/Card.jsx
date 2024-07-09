@@ -74,6 +74,7 @@ export default function Card(props){
         pace = `${convertBike(props.average_speed)} mi/h`
     }
 
+
     return (
         <div className="card">
             <h2>{props.name}</h2>
