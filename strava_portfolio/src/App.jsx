@@ -27,7 +27,7 @@ export default function App(){
   }, [])
 
   function getActivities(data){
-    fetch("https://www.strava.com/api/v3/athlete/activities?per_page=100", {
+    fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${data.access_token}`
