@@ -8,9 +8,11 @@ html, body {
 
 #root {
   display: flex;
+  flex-direction: column;
   height: 100vh;
   width: 100vw;
   background-color: rgb(228, 228, 228);
+  font-family: 'Karla', sans-serif;
 }
 
 .app-container {
@@ -21,7 +23,6 @@ html, body {
   border-radius: 10px;
   margin: auto;
   overflow-y: scroll;
-  font-family: 'Karla', sans-serif;
 }
 
 .cards-container {
@@ -36,14 +37,13 @@ html, body {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 8px, rgba(0, 0, 0, 0.15) 0px -3px 8px;
 }
 
-h1, h2 {
+h1, h3 {
   margin: 0;
-  padding: 0;
-  text-align: center;
 }
 
-.card > h2 {
-  margin-top: 0.5em;
+h2 {
+  margin: 0.5em 0 0 0;
+  text-align: center;
 }
 
 .activity-details {
@@ -62,3 +62,21 @@ p {
   font-weight: 400;
 }
 
+.card:hover {
+  box-shadow: rgba(255, 69, 0, 0.25) 0px 3px 12px, rgba(255, 69, 0, 0.25) 0px -3px 12px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1em;
+  margin-bottom: 1em;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.header > h1 {
+  letter-spacing: -0.15rem;
+  color: orangered;
+}

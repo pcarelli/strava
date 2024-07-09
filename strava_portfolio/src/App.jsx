@@ -1,5 +1,6 @@
 import React from 'react'
 import Card from './Card.jsx'
+import Header from './Header.jsx'
 
 export default function App(){
   const refreshToken = "de52dbc3be57eebc75cb5d4a31829d4b365e19cd"
@@ -38,18 +39,23 @@ export default function App(){
   }
 
   return (
-    <div className='app-container'>
-      <h1>Activities: {stravaData.length}</h1>
-      <div className='cards-container'>
-        {stravaData.map(activity => {
-          return (
-            <Card
-              key={activity.upload_id}
-              {...activity}
-            />
-          )
-        })}
+    <>
+      <Header
+        activityCount={stravaData.length}
+      />
+      <div className='app-container'>
+        <div className='cards-container'>
+          {stravaData.map(activity => {
+            return (
+              <Card
+                key={activity.upload_id}
+                {...activity}
+              />
+            )
+          })}
+        </div>
       </div>
-    </div>
+    </>
+    
   )
 }
