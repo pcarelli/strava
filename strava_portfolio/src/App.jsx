@@ -1,6 +1,7 @@
 import React from 'react'
 import Card from './Card.jsx'
 import Header from './Header.jsx'
+import FilterBar from './FilterBar.jsx'
 
 export default function App(){
   const refreshToken = "de52dbc3be57eebc75cb5d4a31829d4b365e19cd"
@@ -38,17 +39,19 @@ export default function App(){
       .then(data => setStravaData(data))
   }
 
+  function chicletClick(){
+    
+  }
+
   return (
     <>
       <Header
         activityCount={stravaData.length}
       />
       <div className='app-container'>
-        <div className='filterBar'>
-          <button className='chiclet chiclet-swim'>Swim</button>
-          <button className='chiclet chiclet-bike'>Bike</button>
-          <button className='chiclet chiclet-run'>Run</button>
-        </div>
+        <FilterBar
+          onClick={chicletClick}
+        />
         <div className='cards-container'>
           {stravaData.map(activity => {
             return (
