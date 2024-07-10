@@ -49,17 +49,17 @@ export default function Card(props){
         return formattedTime
     }
 
-    function convertSwim(speed){
+    function convertSwimSpeed(speed){
         const decimalPace = 100*Math.round((1/(speed*60))*10000)/10000
         return decimalToMinuteSecondPace(decimalPace)
     }
 
-    function convertRun(speed){
+    function convertRunSpeed(speed){
         const decimalPace = Math.round((1/(speed*60))*1609*100)/100
         return decimalToMinuteSecondPace(decimalPace)
     }
 
-    function convertBike(speed){
+    function convertBikeSpeed(speed){
         const decimalPace = Math.round(((speed*60*60)/1609)*10)/10
         return decimalPace
     }
@@ -67,11 +67,24 @@ export default function Card(props){
     let pace
 
     if(props.sport_type === "Swim"){
-        pace = `${convertSwim(props.average_speed)} min/100m`
+        pace = `${convertSwimSpeed(props.average_speed)} min/100m`
     } else if(props.sport_type === "Run"){
-        pace = `${convertRun(props.average_speed)} /mi`
+        pace = `${convertRunSpeed(props.average_speed)} /mi`
     } else if (props.sport_type === "Ride"){
-        pace = `${convertBike(props.average_speed)} mi/h`
+        pace = `${convertBikeSpeed(props.average_speed)} mi/h`
+    }
+
+
+    function convertRunBikeDistance(dist){
+        return Math.round((dist/1609)*100)/100
+    }
+
+    let totalDistance
+
+    if(props.sport_type === "Swim"){
+        totalDistance = `${Math.round(props.distance)}m`
+    } else if(props.sport_type === "Ride" || props.sport_type === "Run"){
+        totalDistance = `${convertRunBikeDistance(props.distance)} mi`
     }
 
 
@@ -83,6 +96,7 @@ export default function Card(props){
                 <p><span className="grey">Type:</span> {props.sport_type}</p>
                 <p><span className="grey">Elapsed Time:</span> {secondsToHourMinuteSecondTime(props.elapsed_time)}</p>
                 <p><span className="grey">Moving Time:</span> {secondsToHourMinuteSecondTime(props.moving_time)}</p>
+                <p><span className="grey">Distance:</span> {totalDistance}</p>
                 <p><span className="grey">Pace:</span> {pace}</p>
             </div>
         </div>
