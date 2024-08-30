@@ -4,123 +4,31 @@
 
 html, body {
   margin: 0;
-}
-
-#root {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(243, 243, 243, 0.5);
-  font-family: 'Karla', sans-serif;
-}
-
-.app-container {
-  box-shadow: 0 0 0 1px rgba(0,0,0,.04), 0 4px 16px -4px rgba(0,0,0,.16);
-  background-color: white;
-  height: 95%;
-  width: 95%;
-  max-width: 1080px;
-  border-radius: 8px;
-  margin: auto;
-  overflow-y: scroll;
-}
-
-.cards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.card {
-  border-radius: 8px;
-  margin: 1em;
-  height: 320px;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 8px, rgba(0, 0, 0, 0.15) 0px -3px 8px;
-}
-
-h1, h3 {
-  margin: 0;
-}
-
-h2 {
-  margin: 0.5em 0 0 0;
-  text-align: center;
-}
-
-.activity-details {
-  margin-top: 1em;
-}
-
-p {
-  margin: 0 0 0 1em;
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-
-.grey {
-  color: darkslategray;
-  font-weight: 400;
-}
-
-.card:hover {
-  box-shadow: rgba(255, 69, 0, 0.25) 0px 3px 12px, rgba(255, 69, 0, 0.25) 0px -3px 12px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .header {
+  background-color: #446461;
+  padding: 1.5rem 1rem;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 1em;
-  margin-bottom: 1em;
-  background-color: white;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-.header > h1 {
-  letter-spacing: -0.15rem;
-  color: orangered;
-}
-
-.filterBar {
-  text-align: center;
-}
-
-.chiclet {
-  border-radius: 16px;
-  background-color: white;
-  font-family: 'Karla', sans-serif;
-  font-weight: 500;
-  padding: 1em 3em;
-  margin: 1em;
-}
-
-.chiclet-swim {
-  border: solid rgb(102, 172, 238) 1px;
-}
-
-.chiclet-bike {
-  border: solid rgb(53, 145, 80) 1px;
-}
-
-.chiclet-run {
-  border: solid rgb(204, 45, 45) 1px;
-}
-
-.chiclet-swim:hover {
-  background-color: rgb(102, 172, 238);
+.h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: white;
-  cursor: pointer;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
 }
 
-.chiclet-bike:hover {
-  background-color: rgb(53, 145, 80);
+.link {
+  margin: 1rem;
   color: white;
-  cursor: pointer;
+  text-decoration: none;
 }
 
-.chiclet-run:hover {
-  background-color: rgb(204, 45, 45);
-  color: white;
-  cursor: pointer;
+.data-area {
+  margin: 1rem;
 }

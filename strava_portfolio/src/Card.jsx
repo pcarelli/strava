@@ -7,15 +7,18 @@ export default function Card(props){
 
     let pace, totalDistance
 
-    if(props.sport_type === "Swim"){
-        pace = `${convertSwimSpeed(props.average_speed)} min/100m`
-        totalDistance = `${Math.round(props.distance)}m`
-    } else if(props.sport_type === "Run"){
-        pace = `${convertRunSpeed(props.average_speed)} /mi`
-        totalDistance = `${convertRunBikeDistance(props.distance)} mi`
-    } else if (props.sport_type === "Ride"){
-        pace = `${convertBikeSpeed(props.average_speed)} mi/h`
-        totalDistance = `${convertRunBikeDistance(props.distance)} mi`
+    switch(props.sport_type){
+        case "Swim":
+            pace = `${convertSwimSpeed(props.average_speed)} min/100m`
+            totalDistance = `${Math.round(props.distance)}m`
+            break
+        case "Run":
+            pace = `${convertRunSpeed(props.average_speed)} /mi`
+            totalDistance = `${convertRunBikeDistance(props.distance)} mi`
+            break
+        case "Ride":
+            pace = `${convertBikeSpeed(props.average_speed)} mi/h`
+            totalDistance = `${convertRunBikeDistance(props.distance)} mi`
     }
 
     return (
