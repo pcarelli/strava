@@ -30,8 +30,11 @@ html, body {
   text-decoration: none;
 }
 
-.data-area:has(.login-container) {
+.data-area {
   margin: 1rem;
+}
+
+.data-area:has(.login-container) {
   display: flex;
   justify-content: center;
 }
@@ -56,7 +59,7 @@ html, body {
   gap: 1rem;
 }
 
-input {
+.login-form > input {
   padding: 0.75rem 0.5rem;
   background-color: rgb(230, 230, 230);
   border: none;
