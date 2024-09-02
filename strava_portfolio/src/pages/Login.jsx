@@ -1,4 +1,5 @@
 import React from "react"
+import { Link, NavLink, useParams } from "react-router-dom"
 
 export default function Login(){
     const [loginFormData, setLoginFormData] = React.useState({email: "", password: ""})
@@ -36,7 +37,7 @@ export default function Login(){
                 />
                 <button>Log in</button>
             </form>
-            <span className="bottom-text">Don't have an account? <span className="bold underline">Create one</span></span>
+            <span className="bottom-text">Don't have an account? <Link to="../signup" className="bold underline">Create one</Link></span>
         </div>
     )
 }
