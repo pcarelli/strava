@@ -17,7 +17,7 @@ export default function Dashboard(){
 
       try {
         await logout()
-        navigate('/login')
+        navigate('/')
       } catch {
         setError('Failed to log out')
       }
@@ -58,7 +58,7 @@ export default function Dashboard(){
 
     return (
         <>
-            <h3>{`Email: ${currentUser.email}`}</h3>
+            <h3>Dashboard</h3>
             <Link to={`https://www.strava.com/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:5173/&response_type=code&scope=read_all&activities=real_all`}>Authorize</Link>
             <button onClick={getAccessToken}>Get Strava data</button>
             <button onClick={handleLogout}>Log Out</button>
