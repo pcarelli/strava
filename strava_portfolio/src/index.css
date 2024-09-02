@@ -110,3 +110,17 @@ html, body {
   color: rgb(136, 0, 0);
   border-radius: 4px;
 }
+
+a {
+  color: black;
+}
+
+.success-container {
+  background-color: hsl(120, 58%, 82%);
+  width: 90%;
+  text-align: center;
+  padding: 1rem;
+  margin: 1rem;
+  color: hsl(120, 100%, 20%);
+  border-radius: 4px;
+}

@@ -2,25 +2,25 @@ import React from "react"
 import { Link, NavLink, useActionData, useParams, useNavigate } from "react-router-dom"
 import {useAuth} from '../contexts/AuthContext'
 
-export default function Login(){
+export default function ForgotPassword(){
 
     const emailRef = React.useRef()
-    const passwordRef = React.useRef()
-    const {login} = useAuth()
+    const {resetPassword} = useAuth()
     const [error, setError] = React.useState('')
+    const [message, setMessage] = React.useState('')
     const [loading, setLoading] = React.useState(false)
-    const navigate = useNavigate()
 
     async function handleSubmit(e){
         e.preventDefault()
 
         try {
+            setMessage('')
             setError('')
             setLoading(true)
-            await login(emailRef.current.value, passwordRef.current.value)
-            navigate('/dashboard')
+            await resetPassword(emailRef.current.value)
+            setMessage('Email sent to your inbox')
         } catch {
-            setError('Failed to sign')
+            setError('Failed to reset password')
         }
 
         setLoading(false)
@@ -29,8 +29,9 @@ export default function Login(){
 
     return (
         <div className="login-container">
-            <h3 className="login-title">Log In</h3>
+            <h3 className="login-title">Password Reset</h3>
             {error && <div className="error-container"><span className='error-text'>{error}</span></div>}
+            {message && <div className="success-container"><span className='success-text'>{message}</span></div>}
             <form onSubmit={handleSubmit} className="login-form">
                 <input
                     name="email"
@@ -38,16 +39,10 @@ export default function Login(){
                     placeholder="Email"
                     ref={emailRef}
                 />
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    ref={passwordRef}
-                />
-                <button disabled={loading}>Log In</button>
+                <button disabled={loading}>Reset Password</button>
             </form>
-            <span className="bottom-text"><Link to="../forgot-password" className="bottom-text bold underline">Forgot password?</Link></span>
-            <span className="bottom-text">Don't have an account? <Link to="../signup" className="bottom-text bold underline">Sign Up</Link></span>
+            <span className="bottom-text"><Link to="../login" className="bottom-text bold underline">Log In</Link></span>
+            <span className="bottom-text">Don't have an account? <Link to="../signup" className="bottom-text bold underline">Create one</Link></span>
         </div>
     )
 }
