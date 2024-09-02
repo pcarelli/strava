@@ -1,15 +1,27 @@
 import React from "react"
-import { Link, NavLink, useParams } from "react-router-dom"
+import { Link, NavLink, useParams, useNavigate } from "react-router-dom"
+import {useAuth} from '../contexts/AuthContext'
 
-export default function Home(){
+export default function Dashboard(){
     const [stravaData, setStravaData] = React.useState([])
-
-    const params = useParams()
-    console.log(params)
+    const [error, setError] = React.useState("")
+    const {currentUser, logout} = useAuth()
+    const navigate = useNavigate()
 
     const clientID = "94243"
     const clientSecret = "813838c6d34960ef53e23a5eb88b6c03b49883ce"
     const refreshToken = "0884d1b71a828ff826ceed04cb4aceef23aae9f8"
+
+    async function handleLogout(){
+      setError('')
+
+      try {
+        await logout()
+        Navigate('/login')
+      } catch {
+        setError('Failed to log out')
+      }
+    }
 
     function getAccessToken(){
         fetch("https://www.strava.com/oauth/token", {
@@ -46,9 +58,10 @@ export default function Home(){
 
     return (
         <>
-            <h3>{`Your client ID is ${clientID}`}</h3>
+            <h3>{`Email: ${currentUser.email}`}</h3>
             <Link to={`https://www.strava.com/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:5173/&response_type=code&scope=read_all&activities=real_all`}>Authorize</Link>
-            <button onClick={() => getAccessToken()}>Get Strava data</button>
+            <button onClick={getAccessToken}>Get Strava data</button>
+            <button onClick={handleLogout}>Log Out</button>
         </>
     )
 }
