@@ -28,9 +28,13 @@ export default function Account(){
     return (
         <div className="profile-container">
             <h3>Profile</h3>
+            <span className="update-btn">Update</span>
             <div className="profile-details-container">
-                <p>{`Email: ${currentUser.email}`}</p>
-                <p>{`Strava API Client ID: ${currentUserDetails.clientID}`}</p>
+                <p>First Name: <strong>{currentUserDetails.firstName}</strong></p>
+                <p>Last Name: <strong>{currentUserDetails.lastName}</strong></p>
+                <p>Email: <strong>{currentUser.email}</strong></p>
+                <p>Strava API Client ID: <strong>{currentUserDetails.clientID}</strong></p>
+                <p>Strava API Client Secret: <strong>{currentUserDetails.clientSecret}</strong></p>
             </div>
         </div>
     )
