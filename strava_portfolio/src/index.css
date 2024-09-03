@@ -238,3 +238,37 @@
     cursor: pointer;
     background-color: #2f4643;
   }
+
+  .update-form {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .form-row {
+    margin: 1rem;
+  }
+
+  form > .update-btn {
+    padding: 0.5rem;
+    background-color: #446461;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 400;
+    width: 25%;
+    margin: auto;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+  }
+
+  .form-row > input {
+    border: solid gray 1px;
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-weight: 600;
+  }
+
+
+
+
