@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import {useAuth} from '../contexts/AuthContext'
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"
+import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
 import app from '../firebase'
 
 export default function Account(){
@@ -10,6 +10,7 @@ export default function Account(){
     const [loading, setLoading] = React.useState(true)
     const [updating, setUpdating] = React.useState(false)
     const [updateFormData, setUpdateFormData] = React.useState({})
+    const [refresh, setRefresh] = React.useState(0)
 
     const db = getFirestore(app)
 
@@ -19,7 +20,7 @@ export default function Account(){
             setCurrentUserDetails(snapshot.data())
             setLoading(false)
         })
-    }, [])
+    }, [refresh])
 
     if(loading){
         return (
@@ -31,11 +32,12 @@ export default function Account(){
         setUpdating(prev => !prev)
     }
 
-    function handleSubmit(e){
+    async function handleSubmit(e){
         e.preventDefault()
-        // push changes to firebase
-        // reset updateFormData to empty array
+        const docRef = doc(db, 'users', currentUser.uid)
+        await updateDoc(docRef, updateFormData)
         setUpdating(prev => !prev)
+        setRefresh(prev => prev+1)
         setUpdateFormData({})
     }
 
