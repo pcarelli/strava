@@ -50,10 +50,15 @@ export function AuthProvider({children}){
 
     React.useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
-            const docRef = doc(db, 'users', user.uid)
             setCurrentUser(user)
-            getDoc(docRef).then(snapshot => setCurrentUserDetails(snapshot.data()))
-            setLoading(false)
+            try {
+                const docRef = doc(db, 'users', user.uid)
+                getDoc(docRef).then(snapshot => setCurrentUserDetails(snapshot.data()))
+            } catch {
+
+            } finally {
+                setLoading(false)
+            }
         })
 
         return unsubscribe
