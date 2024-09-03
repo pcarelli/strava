@@ -51,14 +51,7 @@ export function AuthProvider({children}){
     React.useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
-            try {
-                const docRef = doc(db, 'users', user.uid)
-                getDoc(docRef).then(snapshot => setCurrentUserDetails(snapshot.data()))
-            } catch {
-
-            } finally {
-                setLoading(false)
-            }
+            setLoading(false)
         })
 
         return unsubscribe
@@ -71,8 +64,7 @@ export function AuthProvider({children}){
         login,
         signup,
         logout,
-        resetPassword,
-        currentUserDetails
+        resetPassword
     }
     return (
         <AuthContext.Provider value={value}>
