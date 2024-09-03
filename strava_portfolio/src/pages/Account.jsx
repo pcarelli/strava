@@ -9,6 +9,7 @@ export default function Account(){
     const [currentUserDetails, setCurrentUserDetails] = React.useState()
     const [loading, setLoading] = React.useState(true)
     const [updating, setUpdating] = React.useState(false)
+    const [updateFormData, setUpdateFormData] = React.useState({})
 
     const db = getFirestore(app)
 
@@ -31,7 +32,19 @@ export default function Account(){
     }
 
     function handleSubmit(e){
+        e.preventDefault()
+        // push changes to firebase
+        // reset updateFormData to empty array
         setUpdating(prev => !prev)
+        setUpdateFormData({})
+    }
+
+    function handleChange(e){
+        const {name, value} = e.target
+        setUpdateFormData(prev => ({
+            ...prev,
+            [name]: value
+        }))
     }
 
     const nonUpdateProfile = 
@@ -57,9 +70,9 @@ export default function Account(){
                         <input
                             id="firstName"
                             name="firstName"
-                            type="string"
-                            placeholder={currentUserDetails.firstName}
-                            value={currentUserDetails.firstName}
+                            type="text"
+                            defaultValue={currentUserDetails.firstName}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -68,8 +81,9 @@ export default function Account(){
                         <input
                             id="lastName"
                             name="lastName"
-                            type="string"
-                            value={currentUserDetails.lastName}
+                            type="text"
+                            defaultValue={currentUserDetails.lastName}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -79,7 +93,8 @@ export default function Account(){
                             id="Email"
                             name="Email"
                             type="Email"
-                            value={currentUser.email}
+                            defaultValue={currentUser.email}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -88,8 +103,9 @@ export default function Account(){
                         <input
                             id="clientID"
                             name="clientID"
-                            type="string"
-                            value={currentUserDetails.clientID}
+                            type="text"
+                            defaultValue={currentUserDetails.clientID}
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -98,8 +114,9 @@ export default function Account(){
                         <input
                             id="clientSecret"
                             name="clientSecret"
-                            type="string"
-                            value={currentUserDetails.clientSecret}
+                            type="text"
+                            defaultValue={currentUserDetails.clientSecret}
+                            onChange={handleChange}
                         />
                     </div>
                     <button className="update-btn">Save</button>
