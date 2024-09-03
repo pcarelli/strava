@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, NavLink, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 export default function Home(){
     return (
@@ -11,7 +11,6 @@ export default function Home(){
                 <Link className="button signup-btn" to="/signup">Sign up</Link>
             </div>
             <div className="cta-container-right">
-
             </div>
         </div>
     </div>
