@@ -1,7 +1,7 @@
 import React from 'react'
 import {auth} from '../firebase'
 import app from '../firebase'
-import { getFirestore, doc, setDoc } from "firebase/firestore"
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore"
 import firebase from 'firebase/compat/app'
 
 const db = getFirestore(app)
@@ -15,6 +15,7 @@ export function useAuth(){
 
 export function AuthProvider({children}){
     const [currentUser, setCurrentUser] = React.useState()
+    const [currentUserDetails, setCurrentUserDetails] = React.useState()
     const [loading, setLoading] = React.useState(true)
 
     function signup(email, password){
@@ -49,7 +50,9 @@ export function AuthProvider({children}){
 
     React.useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
+            const docRef = doc(db, 'users', user.uid)
             setCurrentUser(user)
+            getDoc(docRef).then(snapshot => setCurrentUserDetails(snapshot.data()))
             setLoading(false)
         })
 
@@ -63,7 +66,8 @@ export function AuthProvider({children}){
         login,
         signup,
         logout,
-        resetPassword
+        resetPassword,
+        currentUserDetails
     }
     return (
         <AuthContext.Provider value={value}>
