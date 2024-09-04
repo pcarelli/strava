@@ -1,66 +1,156 @@
 import React from "react"
 import { Link, NavLink, useParams, useNavigate } from "react-router-dom"
 import {useAuth} from '../contexts/AuthContext'
+import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
+import app, { auth } from '../firebase'
+import { ring } from 'ldrs'
 
 export default function Dashboard(){
-    const [stravaData, setStravaData] = React.useState([])
-    const [error, setError] = React.useState("")
-    const {currentUser, logout} = useAuth()
-    const navigate = useNavigate()
+  const [stravaData, setStravaData] = React.useState([])
+  const [error, setError] = React.useState("")
+  const {currentUser, logout} = useAuth()
+  const [currentUserDetails, setCurrentUserDetails] = React.useState({})
+  const [details, setDetails] = React.useState({})
+  const [refresh, setRefresh] = React.useState(0)
+  const [loading, setLoading] = React.useState(true)
+  const [updateTokens, setUpdateTokens] = React.useState({})
+  const navigate = useNavigate()
 
-    const clientID = "94243"
-    const clientSecret = "813838c6d34960ef53e23a5eb88b6c03b49883ce"
-    const refreshToken = "0884d1b71a828ff826ceed04cb4aceef23aae9f8"
+  async function handleLogout(){
+    setError('')
 
-    async function handleLogout(){
-      setError('')
-
-      try {
-        await logout()
-        navigate('/')
-      } catch {
-        setError('Failed to log out')
-      }
+    try {
+      await logout()
+      navigate('/')
+    } catch {
+      setError('Failed to log out')
     }
+  }
 
-    function getAccessToken(){
-        fetch("https://www.strava.com/oauth/token", {
+  const db = getFirestore(app)
+
+  React.useEffect(() => {
+    const docRef = doc(db, 'users', currentUser.uid)
+    getDoc(docRef)
+    .then(snapshot => snapshot.data())
+    .then(data => {
+      setCurrentUserDetails(data)
+      setLoading(false)
+    })
+  }, [refresh])
+
+  React.useEffect(() => {
+    //check if currentUserDetails has data
+    if(Object.keys(currentUserDetails).length){
+      //user needs to authorize
+      if(!currentUserDetails.accessToken.length){
+        if(!currentUserDetails.clientID.length || !currentUserDetails.clientSecret.length){
+          return (
+            <div className="error-container"><span className='error-text'>Please input your Client Secret and Client ID in your profile.</span></div>
+          )
+        } else {
+          let authCode = ''
+          if(window.location.href !== window.location.href.split("&").toString()){
+            authCode = window.location.href.split("&").filter(row => row.includes('code')).toString().split("=")[1]
+          }
+          if(authCode.length && Object.keys(currentUserDetails).length){
+            fetch("https://www.strava.com/oauth/token", {
+              method: "POST",
+              body: JSON.stringify({
+                client_id: currentUserDetails.clientID,
+                client_secret: currentUserDetails.clientSecret,
+                grant_type: "authorization_code",
+                code: authCode
+              }),
+              headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }
+            })
+            .then(res => res.json())
+            .then(async data => {
+              const tokens = {
+                accessToken: data.access_token, 
+                accessTokenExpireDate: data.expires_at, 
+                refreshToken: data.refresh_token
+              }
+  
+              const docRef = doc(db, 'users', currentUser.uid)
+              await updateDoc(docRef, tokens)
+              setRefresh(prev => prev+1)
+            })
+          }
+        }
+      } else {
+        //user has authorized before, check token expire status
+        if(currentUserDetails.accessTokenExpireDate <= (Date.now())/1000){
+          fetch("https://www.strava.com/oauth/token", {
             method: "POST",
             body: JSON.stringify({
-              client_id: clientID,
-              client_secret: clientSecret,
+              client_id: currentUserDetails.clientID,
+              client_secret: currentUserDetails.clientSecret,
               grant_type: "refresh_token",
-              refresh_token: refreshToken
+              code: currentUserDetails.refreshToken
             }),
             headers: {
               "Content-type": "application/json; charset=UTF-8"
             }
           })
-            .then(res => res.json())
-            .then(data => getActivities(data))
+          .then(res => res.json())
+          .then(async data => {
+            const tokens = {
+              accessToken: data.access_token, 
+              accessTokenExpireDate: data.expires_at
+            }
+
+            const docRef = doc(db, 'users', currentUser.uid)
+            await updateDoc(docRef, tokens)
+            setRefresh(prev => prev+1)
+          })
+        }
+      }
     }
 
-    function getActivities(data){
-        fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${data.access_token}`
-          }
-        })
-          .then(res => res.json())
-          .then(data => setStravaData(data))
-      }
+    
+  }, [Object.keys(currentUserDetails).length])
 
-    const displayData = stravaData
-    console.log(displayData)
+
+  if(loading){
+    ring.register()
+    return (
+        <div className="ldr">
+            <l-ring
+                size="40"
+                stroke="4"
+                bg-opacity="0"
+                speed="2" 
+                color="black" 
+            ></l-ring>
+        </div>
+    )
+  }
+
+
+    // function getActivities(data){
+    //     fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
+    //       method: "GET",
+    //       headers: {
+    //         "Authorization": `Bearer ${data.access_token}`
+    //       }
+    //     })
+    //       .then(res => res.json())
+    //       .then(data => setStravaData(data))
+    //   }
+
+    // const displayData = stravaData
+    // console.log(displayData)
 
 
 
     return (
         <>
             <h3>Dashboard</h3>
-            <Link to={`https://www.strava.com/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:5173/&response_type=code&scope=read_all&activities=real_all`}>Authorize</Link>
-            <button onClick={getAccessToken}>Get Strava data</button>
+            <Link to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=read_all&activities=real_all`}>Authorize</Link>
+            <button>Get Strava data</button>
             <button onClick={handleLogout}>Log Out</button>
         </>
     )

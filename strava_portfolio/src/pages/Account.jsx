@@ -5,7 +5,7 @@ import app from '../firebase'
 import { ring } from 'ldrs'
 
 
-export default function Account(){
+export default function Account(){    
 
     const {currentUser} = useAuth()
     const [currentUserDetails, setCurrentUserDetails] = React.useState()
@@ -69,6 +69,7 @@ export default function Account(){
             <p>Last Name: <strong>{currentUserDetails.lastName}</strong></p>
             <p>Email: <strong>{currentUser.email}</strong></p>
             <p>Strava API Client ID: <strong>{currentUserDetails.clientID}</strong></p>
+            <p>Strava API Client Secret: <strong>{currentUserDetails.clientSecret}</strong></p>
         </div>
     </div>
 
@@ -117,6 +118,17 @@ export default function Account(){
                             name="clientID"
                             type="text"
                             defaultValue={currentUserDetails.clientID}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="form-row">
+                        <label htmlFor="clientSecret">Strava API Client Secret: </label>
+                        <input
+                            id="clientSecret"
+                            name="clientSecret"
+                            type="text"
+                            defaultValue={currentUserDetails.clientSecret}
                             onChange={handleChange}
                         />
                     </div>
