@@ -278,6 +278,28 @@
     margin-top: 3rem;
   }
 
+  .link-container {
+    display: flex;
+    gap: 1rem;
+  }
+
+  #auth-link, .dashboard-button {
+    padding: 0.75rem 0.5rem;
+    background-color: #446461;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+  }
+
+  .dashboard-button:hover {
+    cursor: pointer;
+  }
+
 
 
 

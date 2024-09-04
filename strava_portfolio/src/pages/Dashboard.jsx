@@ -151,9 +151,9 @@ export default function Dashboard(){
         <>
             <h3>Dashboard</h3>
             <div className="link-container">
-              <Link to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=read_all&activity=read_all`}>Authorize</Link>
-              <button onClick={getActivities}>Get Strava Activities</button>
-              <button onClick={handleLogout}>Log Out</button>
+              <Link id="auth-link" to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=read_all&activity=read_all`}>Authorize</Link>
+              <button className="dashboard-button" onClick={getActivities}>Get Strava Activities</button>
+              <button className="dashboard-button"onClick={handleLogout}>Log Out</button>
             </div>
         </>
     )
