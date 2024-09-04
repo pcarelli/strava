@@ -300,6 +300,18 @@
     cursor: pointer;
   }
 
+  .dashboard-button:disabled {
+    cursor: default;
+    background-color: #b8b8b8;
+    color: rgb(49, 49, 49);
+  }
+
+  .data-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
 
 
 

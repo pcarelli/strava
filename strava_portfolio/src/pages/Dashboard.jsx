@@ -147,11 +147,12 @@ export default function Dashboard(){
   const displayData = stravaData
   console.log(displayData)
 
+  const displayLink = currentUserDetails.accessToken.length ? <button className="dashboard-button" disabled>Authorized</button> : <Link id="auth-link" to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=activity:read_all`}>Authorize</Link>
     return (
         <>
-            <h3>Dashboard</h3>
+            <h1>Dashboard</h1>
             <div className="link-container">
-              <Link id="auth-link" to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=read_all&activity=read_all`}>Authorize</Link>
+              {displayLink}
               <button className="dashboard-button" onClick={getActivities}>Get Strava Activities</button>
               <button className="dashboard-button"onClick={handleLogout}>Log Out</button>
             </div>
