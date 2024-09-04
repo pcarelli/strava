@@ -108,7 +108,18 @@ export default function Dashboard(){
           })
         } else {
           //fetch strava activities
-          // getActivities()
+          setLoading(true)
+          fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
+            method: "GET",
+              headers: {
+                "Authorization": `Bearer ${currentUserDetails.accessToken}`
+              }
+            })
+          .then(res => res.json())
+          .then(data => {
+            setStravaData(data)
+            setLoading(false)
+          })
         }
       }
     }
