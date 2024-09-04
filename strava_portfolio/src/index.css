@@ -42,11 +42,18 @@
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
     text-decoration: none;
   }
+
+  .link, .dash-link {
+    margin: 1rem;
+    text-decoration: none;
+  }
   
   .link {
-    margin: 1rem;
     color: white;
-    text-decoration: none;
+  }
+
+  .dash-link {
+    color: black;
   }
   
   .data-area:has(.login-container) {
@@ -334,4 +341,8 @@
   .no-margin {
     margin: 0;
     text-align: center;
+  }
+
+  .dashboard-nav {
+    margin-bottom: 1rem;
   }

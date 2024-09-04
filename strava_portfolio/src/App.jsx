@@ -4,6 +4,7 @@ import Signup from './pages/Signup.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Home from './pages/Home.jsx'
 import Account from './pages/Account.jsx'
+import Fragments from './pages/Fragments.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import Layout from './components/Layout.jsx'
 import DashboardLayout from './components/DashboardLayout.jsx'
@@ -20,7 +21,8 @@ export default function App(){
 
               <Route element={<AuthRequired />}>
                 <Route path='dashboard' element={<DashboardLayout />}>
-                  <Route index element={<Dashboard />} />
+                  <Route path='strava-data' element={<Dashboard />} />
+                  <Route path='fragments' element={<Fragments />} />
                 </Route>
                 <Route path='account' element={<Account />} />
               </Route>
