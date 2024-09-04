@@ -106,6 +106,9 @@ export default function Dashboard(){
             await updateDoc(docRef, tokens)
             setRefresh(prev => prev+1)
           })
+        } else {
+          //fetch strava activities
+          // getActivities()
         }
       }
     }
@@ -130,28 +133,28 @@ export default function Dashboard(){
   }
 
 
-    // function getActivities(data){
-    //     fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
-    //       method: "GET",
-    //       headers: {
-    //         "Authorization": `Bearer ${data.access_token}`
-    //       }
-    //     })
-    //       .then(res => res.json())
-    //       .then(data => setStravaData(data))
-    //   }
+  function getActivities(){
+    fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
+      method: "GET",
+        headers: {
+          "Authorization": `Bearer ${currentUserDetails.accessToken}`
+        }
+      })
+    .then(res => res.json())
+    .then(data => setStravaData(data))
+  }
 
-    // const displayData = stravaData
-    // console.log(displayData)
-
-
+  const displayData = stravaData
+  console.log(displayData)
 
     return (
         <>
             <h3>Dashboard</h3>
-            <Link to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=read_all&activities=real_all`}>Authorize</Link>
-            <button>Get Strava data</button>
-            <button onClick={handleLogout}>Log Out</button>
+            <div className="link-container">
+              <Link to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=read_all&activity=read_all`}>Authorize</Link>
+              <button onClick={getActivities}>Get Strava Activities</button>
+              <button onClick={handleLogout}>Log Out</button>
+            </div>
         </>
     )
 }
