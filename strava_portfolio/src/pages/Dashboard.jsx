@@ -145,6 +145,7 @@ export default function Dashboard(){
 
 
   function getActivities(){
+    setLoading(true)
     fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
       method: "GET",
         headers: {
@@ -152,7 +153,10 @@ export default function Dashboard(){
         }
       })
     .then(res => res.json())
-    .then(data => setStravaData(data))
+    .then(data => {
+      setStravaData(data)
+      setLoading(false)
+    })
   }
 
   function dateConvert(stringDate){
