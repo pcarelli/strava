@@ -169,19 +169,24 @@ export default function Dashboard(){
   }
 
   let displayData = stravaData
-  console.log(displayData)
   displayData = displayData.filter(activity => activity.type==="Run")
+  
   console.log(displayData)
+  
   const displayActivities = displayData.map(act => {
     return (
       <div className="activity-card">
-        <span>{act.id}</span>
-        <span>{dateConvert(act.start_date)}</span>
+        <h3 className="no-margin">{act.name}</h3>
+        <div className="activity-details">
+          <span>{act.id}</span>
+          <span>{dateConvert(act.start_date)}</span>
+        </div>
       </div>
     )
   })
 
   const displayLink = currentUserDetails.accessToken.length ? <button className="dashboard-button" disabled>Authorized</button> : <Link id="auth-link" to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=activity:read_all`}>Authorize</Link>
+  
   return (
     <>
       <h1>Dashboard</h1>
