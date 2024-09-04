@@ -2,6 +2,8 @@ import React, { useEffect } from "react"
 import {useAuth} from '../contexts/AuthContext'
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
 import app from '../firebase'
+import { ring } from 'ldrs'
+
 
 export default function Account(){
 
@@ -23,8 +25,17 @@ export default function Account(){
     }, [refresh])
 
     if(loading){
+        ring.register()
         return (
-            <h1>Loading...</h1>
+            <div className="ldr">
+                <l-ring
+                    size="40"
+                    stroke="4"
+                    bg-opacity="0"
+                    speed="2" 
+                    color="black" 
+                ></l-ring>
+            </div>
         )
     }
 
@@ -58,7 +69,6 @@ export default function Account(){
             <p>Last Name: <strong>{currentUserDetails.lastName}</strong></p>
             <p>Email: <strong>{currentUser.email}</strong></p>
             <p>Strava API Client ID: <strong>{currentUserDetails.clientID}</strong></p>
-            <p>Strava API Client Secret: <strong>{currentUserDetails.clientSecret}</strong></p>
         </div>
     </div>
 
@@ -107,17 +117,6 @@ export default function Account(){
                             name="clientID"
                             type="text"
                             defaultValue={currentUserDetails.clientID}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="form-row">
-                        <label htmlFor="clientSecret">Strava API Client Secret: </label>
-                        <input
-                            id="clientSecret"
-                            name="clientSecret"
-                            type="text"
-                            defaultValue={currentUserDetails.clientSecret}
                             onChange={handleChange}
                         />
                     </div>
