@@ -10,10 +10,8 @@ export default function Dashboard(){
   const [error, setError] = React.useState("")
   const {currentUser, logout} = useAuth()
   const [currentUserDetails, setCurrentUserDetails] = React.useState({})
-  const [details, setDetails] = React.useState({})
   const [refresh, setRefresh] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
-  const [updateTokens, setUpdateTokens] = React.useState({})
   const navigate = useNavigate()
 
   async function handleLogout(){
@@ -124,7 +122,7 @@ export default function Dashboard(){
       }
     }
 
-    
+    //fix this
   }, [Object.keys(currentUserDetails).length])
 
 
