@@ -7,23 +7,11 @@ import { ring } from 'ldrs'
 
 export default function Dashboard(){
   const [stravaData, setStravaData] = React.useState([])
-  const [error, setError] = React.useState("")
-  const {currentUser, logout} = useAuth()
+  const {currentUser} = useAuth()
   const [currentUserDetails, setCurrentUserDetails] = React.useState({})
   const [refresh, setRefresh] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
   const navigate = useNavigate()
-
-  async function handleLogout(){
-    setError('')
-
-    try {
-      await logout()
-      navigate('/')
-    } catch {
-      setError('Failed to log out')
-    }
-  }
 
   const db = getFirestore(app)
 
@@ -195,7 +183,6 @@ export default function Dashboard(){
       <div className="link-container">
         {displayLink}
         <button className="dashboard-button" onClick={getActivities}>Get Strava Activities</button>
-        <button className="dashboard-button"onClick={handleLogout}>Log Out</button>
       </div>
       <div className="activities-container">
         {displayActivities}
