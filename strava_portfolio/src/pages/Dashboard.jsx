@@ -108,18 +108,18 @@ export default function Dashboard(){
           })
         } else {
           //fetch strava activities
-          setLoading(true)
-          fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
-            method: "GET",
-              headers: {
-                "Authorization": `Bearer ${currentUserDetails.accessToken}`
-              }
-            })
-          .then(res => res.json())
-          .then(data => {
-            setStravaData(data)
-            setLoading(false)
-          })
+          // setLoading(true)
+          // fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
+          //   method: "GET",
+          //     headers: {
+          //       "Authorization": `Bearer ${currentUserDetails.accessToken}`
+          //     }
+          //   })
+          // .then(res => res.json())
+          // .then(data => {
+          //   setStravaData(data)
+          //   setLoading(false)
+          // })
         }
       }
     }
@@ -155,18 +155,44 @@ export default function Dashboard(){
     .then(data => setStravaData(data))
   }
 
-  const displayData = stravaData
+  function dateConvert(stringDate){
+    const date = new Date(stringDate)
+    const options = {
+        weekday:"short", 
+        month:"numeric", 
+        day:"numeric", 
+        hour:"numeric", 
+        minute:"numeric",
+        timeZone: "America/New_York"
+    }
+        return date.toLocaleDateString("en-us", options)
+  }
+
+  let displayData = stravaData
   console.log(displayData)
+  displayData = displayData.filter(activity => activity.type==="Run")
+  console.log(displayData)
+  const displayActivities = displayData.map(act => {
+    return (
+      <div className="activity-card">
+        <span>{act.id}</span>
+        <span>{dateConvert(act.start_date)}</span>
+      </div>
+    )
+  })
 
   const displayLink = currentUserDetails.accessToken.length ? <button className="dashboard-button" disabled>Authorized</button> : <Link id="auth-link" to={`https://www.strava.com/oauth/authorize?client_id=${currentUserDetails.clientID}&redirect_uri=http://localhost:5173/dashboard&response_type=code&scope=activity:read_all`}>Authorize</Link>
-    return (
-        <>
-            <h1>Dashboard</h1>
-            <div className="link-container">
-              {displayLink}
-              <button className="dashboard-button" onClick={getActivities}>Get Strava Activities</button>
-              <button className="dashboard-button"onClick={handleLogout}>Log Out</button>
-            </div>
-        </>
-    )
+  return (
+    <>
+      <h1>Dashboard</h1>
+      <div className="link-container">
+        {displayLink}
+        <button className="dashboard-button" onClick={getActivities}>Get Strava Activities</button>
+        <button className="dashboard-button"onClick={handleLogout}>Log Out</button>
+      </div>
+      <div className="activities-container">
+        {displayActivities}
+      </div>
+    </>
+  )
 }
