@@ -6,6 +6,7 @@ import Home from './pages/Home.jsx'
 import Account from './pages/Account.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
 import Layout from './components/Layout.jsx'
+import DashboardLayout from './components/DashboardLayout.jsx'
 import { BrowserRouter, Routes, Route, } from "react-router-dom"
 import { AuthProvider } from './contexts/AuthContext.jsx'
 import AuthRequired from './components/AuthRequired.jsx'
@@ -18,7 +19,9 @@ export default function App(){
             <Route path='/' element={<Layout />}>
 
               <Route element={<AuthRequired />}>
-                <Route path='dashboard' element={<Dashboard />} />
+                <Route path='dashboard' element={<DashboardLayout />}>
+                  <Route index element={<Dashboard />} />
+                </Route>
                 <Route path='account' element={<Account />} />
               </Route>
 

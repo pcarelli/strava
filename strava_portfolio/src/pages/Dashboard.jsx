@@ -179,7 +179,6 @@ export default function Dashboard(){
   
   return (
     <>
-      <h1>Dashboard</h1>
       <div className="link-container">
         {displayLink}
         <button className="dashboard-button" onClick={getActivities}>Get Strava Activities</button>
