@@ -55,7 +55,6 @@
   
   .data-area:has(.login-container) {
     display: flex;
-    justify-content: center;
   }
   
   .login-container {
