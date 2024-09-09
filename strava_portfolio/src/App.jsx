@@ -1,7 +1,7 @@
 import React from 'react'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
-import Dashboard from './pages/Dashboard.jsx'
+import Activities from './pages/Activities.jsx'
 import Home from './pages/Home.jsx'
 import Account from './pages/Account.jsx'
 import Fragments from './pages/Fragments.jsx'
@@ -21,7 +21,7 @@ export default function App(){
 
               <Route element={<AuthRequired />}>
                 <Route path='dashboard' element={<DashboardLayout />}>
-                  <Route path='strava-data' element={<Dashboard />} />
+                  <Route path='activities' element={<Activities />} />
                   <Route path='fragments' element={<Fragments />} />
                 </Route>
                 <Route path='account' element={<Account />} />

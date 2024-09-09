@@ -13,7 +13,7 @@ export default function DashboardLayout(){
         <>  
             <h1>Dashboard</h1>
             <nav className="dashboard-nav">
-                <NavLink className="dash-link" to="/dashboard/strava-data" style={({isActive}) => isActive ? activeStyles: null}>Strava Data</NavLink>
+                <NavLink className="dash-link" to="/dashboard/activities" style={({isActive}) => isActive ? activeStyles: null}>Activities</NavLink>
                 <NavLink className="dash-link" to="/dashboard/fragments" style={({isActive}) => isActive ? activeStyles: null}>Fragments</NavLink>
             </nav>
             <Outlet />

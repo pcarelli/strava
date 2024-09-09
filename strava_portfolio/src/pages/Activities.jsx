@@ -5,7 +5,7 @@ import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
 import app, { auth } from '../firebase'
 import { ring } from 'ldrs'
 
-export default function Dashboard(){
+export default function Activities(){
   const [stravaData, setStravaData] = React.useState([])
   const {currentUser} = useAuth()
   const [currentUserDetails, setCurrentUserDetails] = React.useState({})
