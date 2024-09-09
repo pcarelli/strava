@@ -75,7 +75,7 @@ export default function Dashboard(){
               client_id: currentUserDetails.clientID,
               client_secret: currentUserDetails.clientSecret,
               grant_type: "refresh_token",
-              code: currentUserDetails.refreshToken
+              refresh_token: currentUserDetails.refreshToken
             }),
             headers: {
               "Content-type": "application/json; charset=UTF-8"
