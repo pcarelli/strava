@@ -325,7 +325,7 @@
   }
 
   .activity-card {
-    padding: 1rem 2rem 2rem 2rem;
+    padding: 1rem 1rem 1rem 1rem;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05), -2px -2px 5px rgba(0, 0, 0, 0.05);
     width: 300px;
     border-radius: 8px;
@@ -345,4 +345,14 @@
 
   .dashboard-nav {
     margin-bottom: 1rem;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+  }
+
+  .open:hover {
+    cursor: pointer;
   }

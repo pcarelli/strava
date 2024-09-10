@@ -4,6 +4,7 @@ import {useAuth} from '../contexts/AuthContext'
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
 import app, { auth } from '../firebase'
 import { ring } from 'ldrs'
+import { MdOpenInNew } from "react-icons/md"
 
 export default function Activities(){
   const [stravaData, setStravaData] = React.useState([])
@@ -68,6 +69,7 @@ export default function Activities(){
         }
       } else {
         //user has authorized before, check token expire status
+        //if expired, get a new token and push to db
         if(currentUserDetails.accessTokenExpireDate <= (Date.now())/1000){
           fetch("https://www.strava.com/oauth/token", {
             method: "POST",
@@ -92,25 +94,11 @@ export default function Activities(){
             await updateDoc(docRef, tokens)
             setRefresh(prev => prev+1)
           })
-        } else {
-          //fetch strava activities
-          // setLoading(true)
-          // fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
-          //   method: "GET",
-          //     headers: {
-          //       "Authorization": `Bearer ${currentUserDetails.accessToken}`
-          //     }
-          //   })
-          // .then(res => res.json())
-          // .then(data => {
-          //   setStravaData(data)
-          //   setLoading(false)
-          // })
-        }
+        } else {}
       }
     }
 
-    //fix this
+    //fix this for new users
   }, [Object.keys(currentUserDetails).length])
 
 
@@ -129,10 +117,13 @@ export default function Activities(){
     )
   }
 
+  let page = 1
+  let result = []
 
   function getActivities(){
+    const url = "https://www.strava.com/api/v3/athlete/activities?per_page=200"
     setLoading(true)
-    fetch("https://www.strava.com/api/v3/athlete/activities?per_page=200", {
+    fetch(`${url}&page=${page}`, {
       method: "GET",
         headers: {
           "Authorization": `Bearer ${currentUserDetails.accessToken}`
@@ -140,7 +131,12 @@ export default function Activities(){
       })
     .then(res => res.json())
     .then(data => {
-      setStravaData(data)
+      if (data.length !== 0){
+        result = [...result, ...data]
+        page++
+        return getActivities()
+      }
+      setStravaData(result)
       setLoading(false)
     })
   }
@@ -166,7 +162,11 @@ export default function Activities(){
   const displayActivities = displayData.map(act => {
     return (
       <div className="activity-card">
-        <h3 className="no-margin">{act.name}</h3>
+        <div className="top-row">
+          <div></div>
+          <h3 className="no-margin">{act.name}</h3>
+          <MdOpenInNew className="open"/>
+        </div>
         <div className="activity-details">
           <span>{act.id}</span>
           <span>{dateConvert(act.start_date)}</span>
