@@ -22,6 +22,7 @@ export default function Activities(){
     .then(snapshot => snapshot.data())
     .then(data => {
       setCurrentUserDetails(data)
+      setStravaData(data.activities)
       setLoading(false)
     })
   }, [refresh])
@@ -117,27 +118,65 @@ export default function Activities(){
     )
   }
 
-  function getActivities({pageNum = 1, result = [], after=0}){
+  async function getActivities({pageNum = 1, result = [], after=0}){
     //check timestamp of most recent activity in db, fetch activities after that date and push to db
-    const url = "https://www.strava.com/api/v3/athlete/activities?per_page=200"
     setLoading(true)
-    fetch(`${url}&page=${pageNum}`, {
-      method: "GET",
-        headers: {
-          "Authorization": `Bearer ${currentUserDetails.accessToken}`
+    const url = "https://www.strava.com/api/v3/athlete/activities?per_page=200"
+    const docRef = doc(db, 'users', currentUser.uid)
+    const res = await getDoc(docRef)
+    let activities = res.data().activities
+    let maxDate = 0
+    if (activities === undefined || activities.length === 0){
+      activities = []
+    } else {
+      maxDate = Math.max.apply(null, activities.map(e => {
+        return  new Date(e.start_date)
+      }))
+    }
+
+    if(maxDate === 0){
+      fetch(`${url}&page=${pageNum}&after=${after}`, {
+        method: "GET",
+          headers: {
+            "Authorization": `Bearer ${currentUserDetails.accessToken}`
+          }
+        })
+      .then(res => res.json())
+      .then(data => {
+        if (data.length !== 0){
+          result = [...result, ...data]
+          pageNum++
+          return getActivities({pageNum, result})
         }
+        result = result.filter(activity => activity.type==="Run")
+        const pushObj = {activities: result}
+        updateDoc(docRef, pushObj) 
+        setRefresh(prev => prev+1)
+        setLoading(false)
       })
-    .then(res => res.json())
-    .then(data => {
-      if (data.length !== 0){
-        result = [...result, ...data]
-        pageNum++
-        return getActivities({pageNum, result})
-      }
-      result = result.filter(activity => activity.type==="Run")
-      setStravaData(result)
-      setLoading(false)
-    })
+    } else {
+      fetch(`${url}&page=${pageNum}&after=${maxDate/1000}`, {
+        method: "GET",
+          headers: {
+            "Authorization": `Bearer ${currentUserDetails.accessToken}`
+          }
+        })
+      .then(res => res.json())
+      .then(data => {
+        if (data.length !== 0){
+          result = [...result, ...data]
+          pageNum++
+          return getActivities({pageNum, result})
+        }
+        result = result.filter(activity => activity.type==="Run")
+        const pushRes = [...activities, ...result]
+        const pushObj = {activities: pushRes}
+        updateDoc(docRef, pushObj)
+        setRefresh(prev => prev+1)
+        setLoading(false)
+      })
+    }
+    
   }
 
   function dateConvert(stringDate){
