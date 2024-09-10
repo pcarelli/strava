@@ -117,7 +117,8 @@ export default function Activities(){
     )
   }
 
-  function getActivities({pageNum = 1, result = []}){
+  function getActivities({pageNum = 1, result = [], after=0}){
+    //check timestamp of most recent activity in db, fetch activities after that date and push to db
     const url = "https://www.strava.com/api/v3/athlete/activities?per_page=200"
     setLoading(true)
     fetch(`${url}&page=${pageNum}`, {
@@ -130,11 +131,10 @@ export default function Activities(){
     .then(data => {
       if (data.length !== 0){
         result = [...result, ...data]
-        console.log(pageNum)
         pageNum++
-        console.log(pageNum)
         return getActivities({pageNum, result})
       }
+      result = result.filter(activity => activity.type==="Run")
       setStravaData(result)
       setLoading(false)
     })
@@ -154,7 +154,6 @@ export default function Activities(){
   }
 
   let displayData = stravaData
-  displayData = displayData.filter(activity => activity.type==="Run")
   
   console.log(displayData)
   
