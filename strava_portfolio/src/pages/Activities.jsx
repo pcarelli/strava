@@ -117,13 +117,10 @@ export default function Activities(){
     )
   }
 
-  let page = 1
-  let result = []
-
-  function getActivities(){
+  function getActivities({pageNum = 1, result = []}){
     const url = "https://www.strava.com/api/v3/athlete/activities?per_page=200"
     setLoading(true)
-    fetch(`${url}&page=${page}`, {
+    fetch(`${url}&page=${pageNum}`, {
       method: "GET",
         headers: {
           "Authorization": `Bearer ${currentUserDetails.accessToken}`
@@ -133,8 +130,10 @@ export default function Activities(){
     .then(data => {
       if (data.length !== 0){
         result = [...result, ...data]
-        page++
-        return getActivities()
+        console.log(pageNum)
+        pageNum++
+        console.log(pageNum)
+        return getActivities({pageNum, result})
       }
       setStravaData(result)
       setLoading(false)
