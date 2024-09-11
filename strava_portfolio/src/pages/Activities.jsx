@@ -16,6 +16,7 @@ export default function Activities(){
 
   const db = getFirestore(app)
 
+  // Load current user data
   React.useEffect(() => {
     const docRef = doc(db, 'users', currentUser.uid)
     getDoc(docRef)
@@ -28,9 +29,9 @@ export default function Activities(){
   }, [refresh])
 
   React.useEffect(() => {
-    //check if currentUserDetails has data
+    // Check if currentUserDetails data has loaded
     if(Object.keys(currentUserDetails).length){
-      //user needs to authorize
+      // Check if user needs to authorize
       if(!currentUserDetails.accessToken.length){
         if(!currentUserDetails.clientID.length || !currentUserDetails.clientSecret.length){
           return (
@@ -69,8 +70,8 @@ export default function Activities(){
           }
         }
       } else {
-        //user has authorized before, check token expire status
-        //if expired, get a new token and push to db
+        // User has authorized before, check token expire status
+        // If expired, get a new token and push to db
         if(currentUserDetails.accessTokenExpireDate <= (Date.now())/1000){
           fetch("https://www.strava.com/oauth/token", {
             method: "POST",
@@ -102,7 +103,7 @@ export default function Activities(){
     //fix this for new users
   }, [Object.keys(currentUserDetails).length])
 
-
+  // Return spinner if loading
   if(loading){
     ring.register()
     return (
@@ -119,12 +120,12 @@ export default function Activities(){
   }
 
   async function getActivities({pageNum = 1, result = [], after=0}){
-    //check timestamp of most recent activity in db, fetch activities after that date and push to db
+    // Check timestamp of most recent activity in db, fetch activities after that date and push to db
     setLoading(true)
     const url = "https://www.strava.com/api/v3/athlete/activities?per_page=200"
     const docRef = doc(db, 'users', currentUser.uid)
     const res = await getDoc(docRef)
-    let activities = res.data().activities
+    let activities = Object.values(res.data().activities)
     let maxDate = 0
     if (activities === undefined || activities.length === 0){
       activities = []
@@ -202,7 +203,8 @@ export default function Activities(){
     const options = {
         weekday:"short", 
         month:"numeric", 
-        day:"numeric", 
+        day:"numeric",
+        year:"numeric",
         hour:"numeric", 
         minute:"numeric",
         timeZone: "America/New_York"
@@ -211,8 +213,8 @@ export default function Activities(){
   }
 
   let displayData = stravaData
-  
   console.log(displayData)
+  displayData = displayData.sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
   
   const displayActivities = displayData.map(act => {
     return (
