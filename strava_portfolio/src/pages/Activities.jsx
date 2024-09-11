@@ -22,7 +22,7 @@ export default function Activities(){
     .then(snapshot => snapshot.data())
     .then(data => {
       setCurrentUserDetails(data)
-      setStravaData(data.activities)
+      data.activities === undefined ? setStravaData([]) : setStravaData(Object.values(data.activities))
       setLoading(false)
     })
   }, [refresh])
@@ -149,6 +149,15 @@ export default function Activities(){
           return getActivities({pageNum, result})
         }
         result = result.filter(activity => activity.type==="Run")
+        const keeps = new Set(['id', 'start_date', 'name'])
+        for (let obj of result) {
+          for (let prop of Object.keys(obj)) {
+             if (!keeps.has(prop)) {
+                 delete obj[prop];
+             }
+          }
+        }
+        result = result.reduce((obj, item) => (obj[item.id] = {start_date: item.start_date, name: item.name, id: item.id}, obj), {})
         const pushObj = {activities: result}
         updateDoc(docRef, pushObj) 
         setRefresh(prev => prev+1)
@@ -169,7 +178,16 @@ export default function Activities(){
           return getActivities({pageNum, result})
         }
         result = result.filter(activity => activity.type==="Run")
-        const pushRes = [...activities, ...result]
+        const keeps = new Set(['id', 'start_date', 'name'])
+        for (let obj of result) {
+          for (let prop of Object.keys(obj)) {
+             if (!keeps.has(prop)) {
+                 delete obj[prop];
+             }
+          }
+        }
+        result = result.reduce((obj, item) => (obj[item.id] = {start_date: item.start_date, name: item.name, id: item.id}, obj), {})
+        const pushRes = {...activities, ...result}
         const pushObj = {activities: pushRes}
         updateDoc(docRef, pushObj)
         setRefresh(prev => prev+1)
