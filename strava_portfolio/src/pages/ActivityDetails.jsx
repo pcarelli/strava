@@ -96,10 +96,10 @@ export default function ActivityDetails(){
                 >
                     <CartesianGrid strokeDasharray="10 10 10" />
                     <XAxis dataKey="time" tick={false}/>
-                    <YAxis />
-                    <Tooltip />
+                    <YAxis tickFormatter={tick => convertRunSpeed(tick)}/>
+                    <Tooltip formatter={value => `${convertRunSpeed(value)} min/mi`}/>
                     <Legend />
-                    <Line type="monotone" dataKey="speed" stroke="#5684d8" dot={false} />
+                    <Line type="monotone" dataKey="speed" stroke="#5684d8" dot={false}/>
                 </LineChart>
             </ResponsiveContainer>    
         </div>
