@@ -220,13 +220,9 @@ export default function Activities(){
     return (
       <div className="activity-card">
         <div className="top-row">
-          <div></div>
           <h3 className="no-margin">{act.name}</h3>
-          <MdOpenInNew className="open"/>
-        </div>
-        <div className="activity-details">
-          <span>{act.id}</span>
           <span>{dateConvert(act.start_date)}</span>
+          <MdOpenInNew className="open"/>
         </div>
       </div>
     )
