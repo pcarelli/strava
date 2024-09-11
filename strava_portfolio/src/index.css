@@ -356,3 +356,12 @@
   .open:hover {
     cursor: pointer;
   }
+
+  .chart-container {
+    width: 100%;
+    height: 600px;
+    background-color: white;
+    padding: 3rem 1rem 1rem 1rem;
+    border-radius: 8px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05), -3px -3px 5px rgba(0, 0, 0, 0.05);
+  }

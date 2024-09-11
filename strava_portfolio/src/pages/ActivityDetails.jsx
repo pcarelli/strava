@@ -4,9 +4,11 @@ import {useAuth} from '../contexts/AuthContext'
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
 import app, { auth } from '../firebase'
 import { ring } from 'ldrs'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { convertRunSpeed } from "../conversions"
 
 export default function ActivityDetails(){
-    const [stravaData, setStravaData] = React.useState([])
+    const [activityData, setActivityData] = React.useState([])
     const {currentUser} = useAuth()
     const [currentUserDetails, setCurrentUserDetails] = React.useState({})
     const [refresh, setRefresh] = React.useState(0)
@@ -29,7 +31,7 @@ export default function ActivityDetails(){
     React.useEffect(() => {
         setLoading(true)
         if(Object.keys(currentUserDetails).length){
-            fetch(`https://www.strava.com/api/v3/activities/${params.id}/streams?keys=time,distance&key_by_type=true`, {
+            fetch(`https://www.strava.com/api/v3/activities/${params.id}/streams?keys=time,distance,velocity_smooth&key_by_type=true`, {
                 method: "GET",
                   headers: {
                     "Authorization": `Bearer ${currentUserDetails.accessToken}`
@@ -37,11 +39,12 @@ export default function ActivityDetails(){
                 })
               .then(res => res.json())
               .then(data => {
-
+                setActivityData(data)
+                setLoading(false)
               })
         }
 
-    }, [refresh])
+    }, [currentUserDetails])
 
 
     // Return spinner if loading
@@ -60,9 +63,45 @@ export default function ActivityDetails(){
         )
     }
 
-    const startDate = currentUserDetails.activities[params.id].start_date
+    const startDate = new Date(currentUserDetails.activities[params.id].start_date).getTime()
+
+    let displayData = activityData
+    let distanceData = displayData.distance === undefined ? [] : displayData.distance.data
+    let timeData = displayData.time === undefined ? [] : displayData.time.data
+    let speedData = displayData.time === undefined ? [] : displayData.velocity_smooth.data
+    let chartData = []
+    chartData.push(timeData, distanceData, speedData)
+
+    chartData = timeData.map((point, index) => {
+        return {time: point, distance: distanceData[index], speed: speedData[index], pace: convertRunSpeed(speedData[index])}
+    })
+
+    console.log("chart data", chartData)
+    const testVal = chartData[100]?.speed
+    console.log(convertRunSpeed(testVal))
 
     return (
-        <h1>Chart</h1>
+        <div className="chart-container"> 
+            <ResponsiveContainer width="99%" height="99%">
+                <LineChart
+                width={800}
+                height={500}
+                data={chartData}
+                margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                }}
+                >
+                    <CartesianGrid strokeDasharray="10 10 10" />
+                    <XAxis dataKey="time" tick={false}/>
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="speed" stroke="#5684d8" dot={false} />
+                </LineChart>
+            </ResponsiveContainer>    
+        </div>
     )
 }

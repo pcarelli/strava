@@ -53,7 +53,7 @@ export function convertSwimSpeed(speed){
 }
 
 export function convertRunSpeed(speed){
-    const decimalPace = Math.round((1/(speed*60))*1609*100)/100
+    const decimalPace = 1/((speed*2.237)/60)
     return decimalToMinuteSecondPace(decimalPace)
 }
 
