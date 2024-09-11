@@ -125,7 +125,7 @@ export default function Activities(){
     const url = "https://www.strava.com/api/v3/athlete/activities?per_page=200"
     const docRef = doc(db, 'users', currentUser.uid)
     const res = await getDoc(docRef)
-    let activities = Object.values(res.data().activities)
+    let activities = res.data().activities === undefined ? [] : Object.values(res.data().activities)
     let maxDate = 0
     if (activities === undefined || activities.length === 0){
       activities = []
@@ -188,7 +188,8 @@ export default function Activities(){
           }
         }
         result = result.reduce((obj, item) => (obj[item.id] = {start_date: item.start_date, name: item.name, id: item.id}, obj), {})
-        const pushRes = {...activities, ...result}
+        const oldActivities = res.data().activities
+        const pushRes = {...oldActivities, ...result}
         const pushObj = {activities: pushRes}
         updateDoc(docRef, pushObj)
         setRefresh(prev => prev+1)

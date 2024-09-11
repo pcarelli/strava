@@ -37,7 +37,7 @@ export default function ActivityDetails(){
                 })
               .then(res => res.json())
               .then(data => {
-                
+
               })
         }
 
@@ -60,7 +60,7 @@ export default function ActivityDetails(){
         )
     }
 
-
+    const startDate = currentUserDetails.activities[params.id].start_date
 
     return (
         <h1>Chart</h1>
