@@ -213,7 +213,6 @@ export default function Activities(){
   }
 
   let displayData = stravaData
-  console.log(displayData)
   displayData = displayData.sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime())
   
   const displayActivities = displayData.map(act => {
@@ -222,7 +221,7 @@ export default function Activities(){
         <div className="top-row">
           <h3 className="no-margin">{act.name}</h3>
           <span>{dateConvert(act.start_date)}</span>
-          <MdOpenInNew className="open"/>
+          <Link to={`${act.id}`}><MdOpenInNew className="open"/></Link>
         </div>
       </div>
     )
