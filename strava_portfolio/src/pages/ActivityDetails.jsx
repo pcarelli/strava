@@ -4,8 +4,9 @@ import {useAuth} from '../contexts/AuthContext'
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
 import app, { auth } from '../firebase'
 import { ring } from 'ldrs'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { convertRunSpeed } from "../conversions"
+// import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { convertRunSpeed } from '../conversions'
+import LineChart from "../components/LineChart"
 
 export default function ActivityDetails(){
     const [activityData, setActivityData] = React.useState([])
@@ -77,31 +78,16 @@ export default function ActivityDetails(){
     })
 
     console.log("chart data", chartData)
-    const testVal = chartData[100]?.speed
-    console.log(convertRunSpeed(testVal))
+
+    
 
     return (
         <div className="chart-container"> 
-            <ResponsiveContainer width="99%" height="99%">
-                <LineChart
-                width={800}
-                height={500}
-                data={chartData}
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                }}
-                >
-                    <CartesianGrid strokeDasharray="10 10 10" />
-                    <XAxis dataKey="time" tick={false}/>
-                    <YAxis tickFormatter={tick => convertRunSpeed(tick)}/>
-                    <Tooltip formatter={value => `${convertRunSpeed(value)} min/mi`}/>
-                    <Legend />
-                    <Line type="monotone" dataKey="speed" stroke="#5684d8" dot={false}/>
-                </LineChart>
-            </ResponsiveContainer>    
+            <svg width={"100%"} height={"100%"}>
+                <polyline points="0,0 0,500" fill="none" stroke="black" />
+                <polyline points="0,500 500,500" fill="none" stroke="black" />
+                <polyline points="0,500 10,300 20,250 30,270 40,260 50,275" fill="none" stroke="black" />
+            </svg>
         </div>
     )
 }
