@@ -9,6 +9,7 @@ import { convertRunSpeed } from '../conversions'
 import LineChart from "../components/LineChart"
 
 export default function ActivityDetails(){
+    const [screenWidth, setScreenWidth] = React.useState(window.innerWidth)
     const [activityData, setActivityData] = React.useState([])
     const {currentUser} = useAuth()
     const [currentUserDetails, setCurrentUserDetails] = React.useState({})
@@ -47,6 +48,19 @@ export default function ActivityDetails(){
 
     }, [currentUserDetails])
 
+    // Get screen width
+    React.useEffect(() => {
+        function watchWidth(){
+            setScreenWidth(window.innerWidth)
+        }
+
+        window.addEventListener("resize", watchWidth)
+
+        return function(){
+            window.removeEventListener("resize", watchWidth)
+        }
+    }, [])
+
 
     // Return spinner if loading
     if(loading){
@@ -66,24 +80,57 @@ export default function ActivityDetails(){
 
     const startDate = new Date(currentUserDetails.activities[params.id].start_date).getTime()
 
+    const height = 536
+    const width = screenWidth-81
+
     let displayData = activityData
     let distanceData = displayData.distance === undefined ? [] : displayData.distance.data
     let timeData = displayData.time === undefined ? [] : displayData.time.data
     let speedData = displayData.time === undefined ? [] : displayData.velocity_smooth.data
+
+    const groupSize = Math.ceil(timeData.length/width)
+    let windowData = displayData.distance === undefined ? [] : sumSubarraySum(distanceData, groupSize)
     let chartData = []
-    chartData.push(timeData, distanceData, speedData)
 
     chartData = timeData.map((point, index) => {
-        return {time: point, x: distanceData[index], y: speedData[index], pace: convertRunSpeed(speedData[index])}
+        return {
+            time: point, 
+            x: distanceData[index], 
+            y: speedData[index], 
+            rollingSpeed: distanceData[index]/(point === 0 ? 1 : point),
+            windowDist: windowData[index],
+            windowSpeed: windowData[index]/groupSize,
+            pace: convertRunSpeed(speedData[index]),
+            windowPace: convertRunSpeed(windowData[index]/groupSize)
+        }
     })
 
+    console.log("group size", groupSize)
     console.log("chart data", chartData)
 
-    
+
+    function sumSubarraySum(arr, num) {
+        if (num > arr.length) {
+          return null
+        }
+      
+        let currentSum = 0
+
+        const newArr = []
+
+        for (let i = 1; i < arr.length; i++) {
+            currentSum = (i - num) < 0 ? 0 : (arr[i] - arr[i - num])
+            newArr.push(currentSum)
+          }
+
+
+        return newArr
+      
+      }
 
     return (
         <div className="chart-container"> 
-            <LineChart data={chartData} />
+            <LineChart data={chartData} height={height} width={width} />
         </div>
     )
 }
