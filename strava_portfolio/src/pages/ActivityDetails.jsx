@@ -96,11 +96,11 @@ export default function ActivityDetails(){
         return {
             time: point, 
             x: distanceData[index], 
-            y: speedData[index], 
+            speed: speedData[index], 
             rollingSpeed: distanceData[index]/(point === 0 ? 1 : point),
             windowDist: windowData[index],
             windowTimeEl: sumSubarraySumTime(timeData, groupSize)[index],
-            windowSpeed: windowData[index]/(windowData[index] === 0 ? 1 : sumSubarraySumTime(timeData, groupSize)[index]),
+            y: windowData[index]/(windowData[index] === 0 ? 1 : sumSubarraySumTime(timeData, groupSize)[index]),
             pace: convertRunSpeed(speedData[index]),
             windowPace: convertRunSpeed(windowData[index]/(windowData[index] === 0 ? 1 : sumSubarraySumTime(timeData, groupSize)[index]))
         }
