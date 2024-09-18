@@ -19,6 +19,7 @@ export default function LineChart(data, height, width){
 
     const maxY = Math.max(...chartData.map(point => point.y))
     const maxX = Math.max(...chartData.map(point => point.x))
+    const maxYalso = Math.max(...chartData.map(point => point.windowSpeed))
 
     const points = chartData.map(point => {
         const x = (point.x/maxX)*chartWidth
@@ -27,6 +28,14 @@ export default function LineChart(data, height, width){
 
         return `${x},${y}`
     }).join(" ")
+
+    const pointsAlso = chartData.map(point => {
+        const x = (point.x/maxX)*chartWidth
+        let y = chartHeight - (point.windowSpeed/maxY)*chartHeight
+
+        return `${x},${y}`
+    }).join(" ")
+
 
     function mouseEnter(){
         setIsHover(true)
@@ -60,6 +69,7 @@ export default function LineChart(data, height, width){
             <polyline points={`0,0 0,${chartHeight}`} fill="none" stroke="#A9A9A9" strokeWidth={3}/>
             <polyline points={`0,${chartHeight} ${chartWidth},${chartHeight}`} fill="none" stroke="#A9A9A9" strokeWidth={3}/>
             <polyline points={points} fill="none" stroke="#446461"/>
+            <polyline points={pointsAlso} fill="none" stroke="red"/>
         </svg>
     </>
     )

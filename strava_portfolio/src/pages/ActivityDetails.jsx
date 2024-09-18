@@ -99,9 +99,10 @@ export default function ActivityDetails(){
             y: speedData[index], 
             rollingSpeed: distanceData[index]/(point === 0 ? 1 : point),
             windowDist: windowData[index],
-            windowSpeed: windowData[index]/groupSize,
+            windowTimeEl: sumSubarraySumTime(timeData, groupSize)[index],
+            windowSpeed: windowData[index]/(windowData[index] === 0 ? 1 : sumSubarraySumTime(timeData, groupSize)[index]),
             pace: convertRunSpeed(speedData[index]),
-            windowPace: convertRunSpeed(windowData[index]/groupSize)
+            windowPace: convertRunSpeed(windowData[index]/(windowData[index] === 0 ? 1 : sumSubarraySumTime(timeData, groupSize)[index]))
         }
     })
 
@@ -118,10 +119,29 @@ export default function ActivityDetails(){
 
         const newArr = []
 
-        for (let i = 1; i < arr.length; i++) {
-            currentSum = (i - num) < 0 ? 0 : (arr[i] - arr[i - num])
+        for (let i = 0; i < arr.length; i++) {
+            currentSum = (i - num + 1) < 0 ? 0 : (arr[i] - arr[i - num + 1])
             newArr.push(currentSum)
           }
+
+
+        return newArr
+      
+      }
+
+      function sumSubarraySumTime(arr, num) {
+        if (num > arr.length) {
+          return null
+        }
+      
+        let currentSum = 0
+
+        const newArr = []
+
+        for (let i = 0; i < arr.length; i++) {
+            currentSum = (i - num + 1) < 0 ? 0 : (arr[i] - arr[i - num + 1])
+            newArr.push(currentSum)
+        }
 
 
         return newArr

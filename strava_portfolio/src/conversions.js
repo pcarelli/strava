@@ -38,7 +38,7 @@ export function secondsToHourMinuteSecondTime(seconds){
 // Speed conversion functions
 
 export function decimalToMinuteSecondPace(decimalSpeed){
-    let secs = Math.round((decimalSpeed-Math.floor(decimalSpeed))*60)
+    let secs = Math.floor((decimalSpeed-Math.floor(decimalSpeed))*60)
     if (secs < 10){
         secs = `0${secs}`
     } else {
