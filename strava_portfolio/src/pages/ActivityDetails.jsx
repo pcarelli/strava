@@ -74,7 +74,7 @@ export default function ActivityDetails(){
     chartData.push(timeData, distanceData, speedData)
 
     chartData = timeData.map((point, index) => {
-        return {time: point, distance: distanceData[index], speed: speedData[index], pace: convertRunSpeed(speedData[index])}
+        return {time: point, x: distanceData[index], y: speedData[index], pace: convertRunSpeed(speedData[index])}
     })
 
     console.log("chart data", chartData)
@@ -83,11 +83,7 @@ export default function ActivityDetails(){
 
     return (
         <div className="chart-container"> 
-            <svg width={"100%"} height={"100%"}>
-                <polyline points="0,0 0,500" fill="none" stroke="black" />
-                <polyline points="0,500 500,500" fill="none" stroke="black" />
-                <polyline points="0,500 10,300 20,250 30,270 40,260 50,275" fill="none" stroke="black" />
-            </svg>
+            <LineChart data={chartData} />
         </div>
     )
 }
