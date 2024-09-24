@@ -70,7 +70,7 @@ export default function ActivityDetails(){
     let timeData = displayData.time === undefined ? [] : displayData.time.data
     let speedData = displayData.time === undefined ? [] : displayData.velocity_smooth.data
 
-    const groupSize = 5
+    const groupSize = 10
     let windowData = displayData.distance === undefined ? [] : sumSubarraySum(distanceData, groupSize)
     let chartData = []
 
@@ -147,7 +147,7 @@ export default function ActivityDetails(){
                         <YAxis tickFormatter={tick => convertRunSpeed(tick)}/>
                         <Tooltip formatter={value => `${convertRunSpeed(value)} min/mi`}/>
                         <Legend />
-                        <Line type="monotone" dataKey="speed" stroke="#5684d8" dot={false}/>
+                        {/* <Line type="monotone" dataKey="speed" stroke="#5684d8" dot={false}/> */}
                         <Line type="monotone" dataKey="y" stroke="#8884d8" dot={false}/>
                       </LineChart>
                   </ResponsiveContainer>    
