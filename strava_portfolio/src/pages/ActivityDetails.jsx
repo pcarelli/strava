@@ -4,12 +4,10 @@ import {useAuth} from '../contexts/AuthContext'
 import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore"
 import app, { auth } from '../firebase'
 import { ring } from 'ldrs'
-// import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { convertRunSpeed } from '../conversions'
-import LineChart from "../components/LineChart"
 
 export default function ActivityDetails(){
-    const [screenWidth, setScreenWidth] = React.useState(window.innerWidth)
     const [activityData, setActivityData] = React.useState([])
     const {currentUser} = useAuth()
     const [currentUserDetails, setCurrentUserDetails] = React.useState({})
@@ -48,19 +46,6 @@ export default function ActivityDetails(){
 
     }, [currentUserDetails])
 
-    // Get screen width
-    React.useEffect(() => {
-        function watchWidth(){
-            setScreenWidth(window.innerWidth)
-        }
-
-        window.addEventListener("resize", watchWidth)
-
-        return function(){
-            window.removeEventListener("resize", watchWidth)
-        }
-    }, [])
-
 
     // Return spinner if loading
     if(loading){
@@ -80,23 +65,20 @@ export default function ActivityDetails(){
 
     const startDate = new Date(currentUserDetails.activities[params.id].start_date).getTime()
 
-    const height = 536
-    const width = screenWidth-81
-
     let displayData = activityData
     let distanceData = displayData.distance === undefined ? [] : displayData.distance.data
     let timeData = displayData.time === undefined ? [] : displayData.time.data
     let speedData = displayData.time === undefined ? [] : displayData.velocity_smooth.data
 
-    const groupSize = Math.ceil(timeData.length/width)
+    const groupSize = 5
     let windowData = displayData.distance === undefined ? [] : sumSubarraySum(distanceData, groupSize)
     let chartData = []
 
     chartData = timeData.map((point, index) => {
         return {
             time: point, 
-            x: distanceData[index], 
-            speed: speedData[index], 
+            dist: distanceData[index], 
+            speed: speedData[index],
             rollingSpeed: distanceData[index]/(point === 0 ? 1 : point),
             windowDist: windowData[index],
             windowTimeEl: sumSubarraySumTime(timeData, groupSize)[index],
@@ -106,7 +88,7 @@ export default function ActivityDetails(){
         }
     })
 
-    console.log("group size", groupSize)
+
     console.log("chart data", chartData)
 
 
@@ -123,7 +105,6 @@ export default function ActivityDetails(){
             currentSum = (i - num + 1) < 0 ? 0 : (arr[i] - arr[i - num + 1])
             newArr.push(currentSum)
           }
-
 
         return newArr
       
@@ -148,9 +129,28 @@ export default function ActivityDetails(){
       
       }
 
-    return (
-        <div className="chart-container"> 
-            <LineChart data={chartData} height={height} width={width} />
-        </div>
-    )
+      return (
+              <div className="chart-container"> 
+                  <ResponsiveContainer width="99%" height="99%">
+                      <LineChart
+                        width={800}
+                        height={500}
+                        data={chartData}
+                        margin={{
+                            top: 5,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
+                        }}
+                      >
+                        <XAxis dataKey="dist" tick={false}/>
+                        <YAxis tickFormatter={tick => convertRunSpeed(tick)}/>
+                        <Tooltip formatter={value => `${convertRunSpeed(value)} min/mi`}/>
+                        <Legend />
+                        <Line type="monotone" dataKey="speed" stroke="#5684d8" dot={false}/>
+                        <Line type="monotone" dataKey="y" stroke="#8884d8" dot={false}/>
+                      </LineChart>
+                  </ResponsiveContainer>    
+              </div>
+          )
 }
